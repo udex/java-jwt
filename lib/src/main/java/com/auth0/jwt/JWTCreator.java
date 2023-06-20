@@ -605,6 +605,23 @@ public final class JWTCreator {
             return new JWTCreator(algorithm, headerClaims, payloadClaims).sign();
         }
 
+        /**
+         * Creates a new JWT and signs is with the given algorithm without adding typ field to the header of JWT.
+         *
+         * @param algorithm used to sign the JWT
+         * @return a new JWT token
+         * @throws IllegalArgumentException if the provided algorithm is null.
+         * @throws JWTCreationException     if the claims could not be converted to a valid JSON
+         *                                  or there was a problem with the signing key.
+         */
+        public String singAsIs(Algorithm algorithm) throws IllegalArgumentException, JWTCreationException {
+            if (algorithm == null) {
+                throw new IllegalArgumentException("The Algorithm cannot be null.");
+            }
+            headerClaims.put(HeaderParams.ALGORITHM, algorithm.getName());
+            return new JWTCreator(algorithm, headerClaims, payloadClaims).sign();
+        }
+
         private void assertNonNull(String name) {
             if (name == null) {
                 throw new IllegalArgumentException("The Custom Claim's name can't be null.");
